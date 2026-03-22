@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lotto & Animal Face Test - AI Fun Site</title>
-    <meta name="description" content="Try our AI-powered Animal Face Test and generate your lucky lotto numbers! Fun, fast, and free AI entertainment.">
+    <title>AI Life Companion - Lotto, Animal Test, Food, Recipes & Health</title>
+    <meta name="description" content="AI-powered fun and health site. Get lotto numbers, discover your animal face, get food and recipe recommendations, and personalized supplement guides.">
     <meta name="google-adsense-account" content="ca-pub-9103697866666926">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,12 +22,14 @@
 <body>
     <header class="main-header">
         <nav class="nav-container">
-            <div class="logo">AI FUN</div>
+            <div class="logo">AI LIFE</div>
             <ul class="nav-links">
                 <li><a href="#lotto">LOTTO</a></li>
-                <li><a href="#animal-test">ANIMAL TEST</a></li>
+                <li><a href="#animal-test">ANIMAL</a></li>
+                <li><a href="#food-picker">FOOD</a></li>
+                <li><a href="#recipe-finder">RECIPE</a></li>
+                <li><a href="#supplement-guide">HEALTH</a></li>
                 <li><a href="#about">ABOUT</a></li>
-                <li><a href="#policy">POLICY</a></li>
             </ul>
             <button id="theme-button">THEME</button>
         </nav>
@@ -35,8 +37,8 @@
 
     <main class="content-wrapper">
         <section id="hero" class="hero-section">
-            <h1>Discover Your Luck & Animal Look</h1>
-            <p>Experience the latest AI technology combined with classic fun. Generate your lucky numbers and find out which animal you resemble most!</p>
+            <h1>Your AI-Powered Life Assistant</h1>
+            <p>From luck and fun to food and health, explore how AI can brighten your day and optimize your lifestyle.</p>
         </section>
 
         <!-- Lotto Section -->
@@ -81,6 +83,75 @@
             </button>
         </section>
 
+        <!-- Smart Food Picker Section -->
+        <section id="food-picker" class="info-section">
+            <div class="machine-header">
+                <h2>SMART FOOD PICKER</h2>
+                <p>Can't decide what to eat? Let AI pick the perfect meal for your current mood.</p>
+            </div>
+            <div class="selection-box">
+                <div class="selection-group">
+                    <label>YOUR MOOD</label>
+                    <select id="food-mood">
+                        <option value="happy">Happy & Energetic</option>
+                        <option value="stressed">Stressed & Spicy</option>
+                        <option value="tired">Tired & Comforting</option>
+                        <option value="excited">Excited & New</option>
+                    </select>
+                </div>
+            </div>
+            <button id="pick-food-button" class="generate-button" style="margin-top: 20px;">
+                PICK MY MEAL
+            </button>
+            <div id="food-result" class="result-container" style="display: none; margin-top: 30px;">
+                <div class="food-card">
+                    <h3 id="food-name"></h3>
+                    <p id="food-desc"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gourmet Recipe Finder Section -->
+        <section id="recipe-finder" class="info-section">
+            <div class="machine-header">
+                <h2>GOURMET RECIPE FINDER</h2>
+                <p>Discover easy-to-follow, delicious recipes for any occasion.</p>
+            </div>
+            <div class="recipe-grid" id="recipe-list">
+                <!-- Recipes will be injected here -->
+            </div>
+        </section>
+
+        <!-- AI Nutrition Guide Section -->
+        <section id="supplement-guide" class="info-section">
+            <div class="machine-header">
+                <h2>AI NUTRITION GUIDE</h2>
+                <p>Select your health goals to receive personalized supplement recommendations.</p>
+            </div>
+            <div class="health-goals-grid">
+                <div class="goal-item" data-goal="energy">
+                    <span class="goal-icon">⚡</span>
+                    <span class="goal-label">Energy</span>
+                </div>
+                <div class="goal-item" data-goal="sleep">
+                    <span class="goal-icon">🌙</span>
+                    <span class="goal-label">Sleep</span>
+                </div>
+                <div class="goal-item" data-goal="skin">
+                    <span class="goal-icon">✨</span>
+                    <span class="goal-label">Skin</span>
+                </div>
+                <div class="goal-item" data-goal="immunity">
+                    <span class="goal-icon">🛡️</span>
+                    <span class="goal-label">Immunity</span>
+                </div>
+            </div>
+            <div id="supplement-result" class="result-container" style="display: none; margin-top: 30px;">
+                <h3>Your Personalized Supplements</h3>
+                <div id="supplement-list" class="supplement-list"></div>
+            </div>
+        </section>
+
         <!-- About Section -->
         <section id="about" class="info-section">
             <h2>About This Site</h2>
@@ -95,6 +166,14 @@
                 <div class="guide-item">
                     <h4>Animal Face Test</h4>
                     <p>Upload a clear photo of your face. Our AI model will analyze your features and compare them to our animal database to find your match.</p>
+                </div>
+                <div class="guide-item">
+                    <h4>Food & Recipes</h4>
+                    <p>Select your mood for a quick food recommendation, or browse our gourmet recipe list for cooking inspiration.</p>
+                </div>
+                <div class="guide-item">
+                    <h4>Nutrition Guide</h4>
+                    <p>Choose your primary health goal to see which supplements are best suited for your needs.</p>
                 </div>
             </div>
         </section>
@@ -162,7 +241,7 @@
 
     <footer class="main-footer">
         <div class="footer-content">
-            <p>&copy; 2026 AI FUN SITE. All rights reserved.</p>
+            <p>&copy; 2026 AI LIFE COMPANION. All rights reserved.</p>
             <div class="footer-links">
                 <a href="#hero">Home</a>
                 <a href="#about">About</a>

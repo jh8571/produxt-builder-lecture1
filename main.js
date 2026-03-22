@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const numbersContainer = document.getElementById('numbers-container');
     const generateButton = document.getElementById('generate-button');
     
-    const colors = [
-        { color: '#ff4d4d', shadow: '#ff4d4d' }, { color: '#4dff4d', shadow: '#4dff4d' },
-        { color: '#4d4dff', shadow: '#4d4dff' }, { color: '#ffff4d', shadow: '#ffff4d' },
-        { color: '#ff4dff', shadow: '#ff4dff' }, { color: '#4dffff', shadow: '#4dffff' }
+    const lottoColors = [
+        { color: '#ff4d4d' }, { color: '#4dff4d' },
+        { color: '#4d4dff' }, { color: '#ffff4d' },
+        { color: '#ff4dff' }, { color: '#4dffff' }
     ];
 
     function generateLottoNumbers() {
@@ -18,15 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayNumbers(numbers) {
+        if (!numbersContainer) return;
         numbersContainer.innerHTML = '';
         numbers.forEach((number, index) => {
             const ball = document.createElement('div');
             ball.classList.add('number-ball');
             ball.textContent = number;
-            const color = colors[index % colors.length];
+            const color = lottoColors[index % lottoColors.length];
             ball.style.borderColor = color.color;
-            ball.style.backgroundColor = color.color; // Solid color for balls in the new UI
-            ball.style.boxShadow = `0 4px 10px rgba(0,0,0,0.2)`;
+            ball.style.backgroundColor = color.color;
             ball.style.animationDelay = `${index * 0.1}s`;
             numbersContainer.appendChild(ball);
         });
@@ -63,14 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let current = '';
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
             if (pageYOffset >= (sectionTop - 150)) {
                 current = section.getAttribute('id');
             }
         });
 
         navLinks.forEach(link => {
-            link.style.color = ''; // Reset
+            link.style.color = '';
             if (link.getAttribute('href').includes(current)) {
                 link.style.color = 'var(--btn-color)';
             }
@@ -78,8 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Animal Face Test Logic ---
-    const URL = "https://teachablemachine.withgoogle.com/models/b9dt_EjLG/";
-    let model, maxPredictions;
+    const TM_URL = "https://teachablemachine.withgoogle.com/models/b9dt_EjLG/";
+    let tmModel;
 
     const uploadArea = document.getElementById('upload-area');
     const imageInput = document.getElementById('image-input');
@@ -92,25 +91,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let uploadedImage = null;
 
-    async function initModel() {
-        if (model) return;
+    async function initTMModel() {
+        if (tmModel) return;
         spinner.style.display = 'block';
         try {
-            const modelURL = URL + "model.json";
-            const metadataURL = URL + "metadata.json";
-            model = await tmImage.load(modelURL, metadataURL);
-            maxPredictions = model.getTotalClasses();
-        } catch (err) {
-            console.error("Model loading failed:", err);
-            alert("Failed to load AI model. Please try again later.");
-        }
+            tmModel = await tmImage.load(TM_URL + "model.json", TM_URL + "metadata.json");
+        } catch (err) { console.error(err); }
         spinner.style.display = 'none';
     }
 
-    if (uploadArea) {
-        uploadArea.addEventListener('click', () => imageInput.click());
-    }
-
+    if (uploadArea) uploadArea.addEventListener('click', () => imageInput.click());
     if (imageInput) {
         imageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -125,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         uploadedImage = img;
                         predictButton.style.display = 'block';
                         resultContainer.style.display = 'none';
-                        predictButton.innerText = "ANALYZE FACE";
                     };
                 };
                 reader.readAsDataURL(file);
@@ -137,50 +126,124 @@ document.addEventListener('DOMContentLoaded', () => {
         predictButton.addEventListener('click', async () => {
             if (!uploadedImage) return;
             predictButton.disabled = true;
-            spinner.style.display = 'block';
-            
-            await initModel();
-            if (model) {
-                const prediction = await model.predict(uploadedImage);
-                
-                spinner.style.display = 'none';
+            await initTMModel();
+            if (tmModel) {
+                const prediction = await tmModel.predict(uploadedImage);
                 resultContainer.style.display = 'block';
                 labelsDiv.innerHTML = '';
-
                 prediction.sort((a, b) => b.probability - a.probability);
-                const bestMatch = prediction[0];
-                resultMessage.innerText = `You look like a ${bestMatch.className}!`;
-
+                resultMessage.innerText = `You look like a ${prediction[0].className}!`;
                 prediction.forEach(p => {
                     const row = document.createElement('div');
                     row.classList.add('label-row');
-                    
-                    const name = document.createElement('span');
-                    name.classList.add('label-name');
-                    name.style.width = '80px';
-                    name.style.fontSize = '0.7rem';
-                    name.innerText = p.className;
-                    
-                    const barContainer = document.createElement('div');
-                    barContainer.classList.add('bar-container');
-                    barContainer.style.flexGrow = '1';
-                    
-                    const bar = document.createElement('div');
-                    bar.classList.add('bar');
-                    
-                    row.appendChild(name);
-                    row.appendChild(barContainer);
-                    barContainer.appendChild(bar);
+                    row.innerHTML = `<span class="label-name" style="width:70px; font-size:0.6rem;">${p.className}</span>
+                                     <div class="bar-container" style="flex-grow:1;"><div class="bar" style="width:${p.probability*100}%"></div></div>`;
                     labelsDiv.appendChild(row);
-                    
-                    setTimeout(() => {
-                        bar.style.width = (p.probability * 100) + '%';
-                    }, 100);
                 });
             }
-            
             predictButton.disabled = false;
-            predictButton.innerText = "RE-ANALYZE";
+        });
+    }
+
+    // --- Smart Food Picker Logic ---
+    const foodData = {
+        happy: [
+            { name: "Colorful Poke Bowl", desc: "Fresh fish and vibrant veggies to match your bright mood!" },
+            { name: "Grilled Salmon Pasta", desc: "Elegant and delicious for a celebratory day." }
+        ],
+        stressed: [
+            { name: "Extra Spicy Ramen", desc: "Sweat out the stress with some serious heat." },
+            { name: "Cheesy Deep Dish Pizza", desc: "Sometimes comfort comes in layers of cheese." }
+        ],
+        tired: [
+            { name: "Warm Chicken Soup", desc: "A hug in a bowl to recharge your energy." },
+            { name: "Beef Pho", desc: "Light yet satisfying broth to soothe your soul." }
+        ],
+        excited: [
+            { name: "Taco Party Platter", desc: "Fun, messy, and perfect for an adventurous spirit." },
+            { name: "Fusion Sushi Rolls", desc: "Unexpected flavors for an exciting day." }
+        ]
+    };
+
+    const pickFoodBtn = document.getElementById('pick-food-button');
+    const foodResult = document.getElementById('food-result');
+    const foodName = document.getElementById('food-name');
+    const foodDesc = document.getElementById('food-desc');
+
+    if (pickFoodBtn) {
+        pickFoodBtn.addEventListener('click', () => {
+            const mood = document.getElementById('food-mood').value;
+            const options = foodData[mood];
+            const pick = options[Math.floor(Math.random() * options.length)];
+            foodName.innerText = pick.name;
+            foodDesc.innerText = pick.desc;
+            foodResult.style.display = 'block';
+            foodResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    }
+
+    // --- Gourmet Recipe Finder Logic ---
+    const recipes = [
+        { name: "Creamy Mushroom Risotto", time: "40m", diff: "Medium", ingredients: ["Arborio Rice", "Mushrooms", "Parmesan", "Broth"] },
+        { name: "Honey Garlic Glazed Chicken", time: "25m", diff: "Easy", ingredients: ["Chicken Thighs", "Honey", "Garlic", "Soy Sauce"] },
+        { name: "Classic Italian Bruschetta", time: "15m", diff: "Easy", ingredients: ["Baguette", "Tomatoes", "Basil", "Olive Oil"] }
+    ];
+
+    const recipeList = document.getElementById('recipe-list');
+    if (recipeList) {
+        recipes.forEach(r => {
+            const card = document.createElement('div');
+            card.classList.add('recipe-card');
+            card.innerHTML = `
+                <h4>${r.name}</h4>
+                <div class="meta">⏱ ${r.time} | ⚖ ${r.diff}</div>
+                <ul>${r.ingredients.map(ing => `<li>${ing}</li>`).join('')}</ul>
+            `;
+            recipeList.appendChild(card);
+        });
+    }
+
+    // --- AI Nutrition Guide Logic ---
+    const supplementData = {
+        energy: [
+            { name: "Vitamin B-Complex", info: "Converts food into fuel and supports brain function." },
+            { name: "CoQ10", info: "Essential for cellular energy production." }
+        ],
+        sleep: [
+            { name: "Magnesium Glycinate", info: "Promotes relaxation and improves sleep quality." },
+            { name: "L-Theanine", info: "Reduces stress and supports a calm mind." }
+        ],
+        skin: [
+            { name: "Collagen Peptides", info: "Supports skin elasticity and hydration." },
+            { name: "Vitamin C", info: "Vital for collagen synthesis and bright skin." }
+        ],
+        immunity: [
+            { name: "Zinc", info: "Crucial for immune cell development and function." },
+            { name: "Vitamin D3", info: "Helps regulate the immune system effectively." }
+        ]
+    };
+
+    const goalItems = document.querySelectorAll('.goal-item');
+    const supplementResult = document.getElementById('supplement-result');
+    const supplementList = document.getElementById('supplement-list');
+
+    if (goalItems) {
+        goalItems.forEach(item => {
+            item.addEventListener('click', () => {
+                goalItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                const goal = item.getAttribute('data-goal');
+                const sups = supplementData[goal];
+                supplementList.innerHTML = '';
+                sups.forEach(s => {
+                    const sItem = document.createElement('div');
+                    sItem.classList.add('supplement-item');
+                    sItem.innerHTML = `<h4>${s.name}</h4><p>${s.info}</p>`;
+                    supplementList.appendChild(sItem);
+                });
+                supplementResult.style.display = 'block';
+                supplementResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
         });
     }
 });
