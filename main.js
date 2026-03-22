@@ -1,6 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
     const numbersContainer = document.getElementById('numbers-container');
     const generateButton = document.getElementById('generate-button');
+    const themeButton = document.getElementById('theme-button');
+    const body = document.body;
+
+    // Theme logic
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    if (currentTheme === 'dark') {
+        body.setAttribute('data-theme', 'dark');
+    }
+
+    themeButton.addEventListener('click', () => {
+        if (body.hasAttribute('data-theme')) {
+            body.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        }
+    });
 
     const colors = [
         { color: '#ff4d4d', shadow: '#ff4d4d' }, // Red

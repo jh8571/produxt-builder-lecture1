@@ -1,48 +1,98 @@
+:root {
+    --bg-color: #f4f4f4;
+    --bg-gradient: linear-gradient(315deg, #f4f4f4 0%, #e0e0e0 74%);
+    --machine-bg: #ffffff;
+    --machine-border: #d0d0d0;
+    --header-color: #333;
+    --display-bg: #eee;
+    --display-border: #ccc;
+    --btn-color: #007bff;
+    --btn-text: #007bff;
+    --btn-hover-bg: #007bff;
+    --btn-hover-text: #fff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+    --bg-color: #1a1a1a;
+    --bg-gradient: linear-gradient(315deg, #1a1a1a 0%, #3d3d3d 74%);
+    --machine-bg: #2c2c2c;
+    --machine-border: #3a3a3a;
+    --header-color: #fff;
+    --display-bg: #111;
+    --display-border: #000;
+    --btn-color: #0ff;
+    --btn-text: #0ff;
+    --btn-hover-bg: #0ff;
+    --btn-hover-text: #111;
+    --shadow-color: rgba(0, 255, 255, 0.1);
+}
+
 body {
     margin: 0;
     padding: 0;
     font-family: 'Orbitron', sans-serif;
-    background: #1a1a1a;
+    background: var(--bg-color);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-image: linear-gradient(315deg, #1a1a1a 0%, #3d3d3d 74%);
+    background-image: var(--bg-gradient);
     overflow: hidden;
+    transition: background 0.3s ease;
+}
+
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+#theme-button {
+    background: var(--machine-bg);
+    border: 2px solid var(--machine-border);
+    color: var(--header-color);
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    transition: all 0.3s ease;
 }
 
 .machine {
-    background: #2c2c2c;
+    background: var(--machine-bg);
     border-radius: 30px;
     padding: 40px;
     box-shadow: 
-        0 0 15px rgba(0, 255, 255, 0.1),
-        0 0 30px rgba(0, 255, 255, 0.1),
-        inset 0 0 10px rgba(0, 0, 0, 0.5);
-    border: 2px solid #3a3a3a;
+        0 0 15px var(--shadow-color),
+        0 0 30px var(--shadow-color),
+        inset 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--machine-border);
     width: 90%;
     max-width: 500px;
+    transition: all 0.3s ease;
 }
 
 .machine-header h1 {
-    color: #fff;
+    color: var(--header-color);
     text-align: center;
     font-size: 2rem;
     letter-spacing: 5px;
     margin: 0 0 30px 0;
-    text-shadow:
-        0 0 5px #0ff,
-        0 0 10px #0ff,
-        0 0 20px #0ff;
+    text-shadow: 0 0 10px var(--btn-color);
+    transition: color 0.3s ease;
 }
 
 .display-screen {
-    background: #111;
+    background: var(--display-bg);
     border-radius: 15px;
     padding: 20px;
     margin-bottom: 30px;
-    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
-    border: 1px solid #000;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--display-border);
+    transition: background 0.3s ease;
 }
 
 .numbers-container {
@@ -79,23 +129,23 @@ body {
 .generate-button {
     font-family: 'Orbitron', sans-serif;
     background: transparent;
-    color: #0ff;
-    border: 2px solid #0ff;
+    color: var(--btn-text);
+    border: 2px solid var(--btn-color);
     padding: 15px 30px;
     font-size: 1.2rem;
     letter-spacing: 2px;
     border-radius: 10px;
     cursor: pointer;
     width: 100%;
-    text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
-    box-shadow: 0 0 10px #0ff, inset 0 0 10px #0ff;
-    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+    text-shadow: 0 0 5px var(--btn-color);
+    box-shadow: 0 0 10px var(--btn-color), inset 0 0 10px var(--btn-color);
+    transition: all 0.3s ease;
 }
 
 .generate-button:hover {
-    background: #0ff;
-    color: #111;
-    box-shadow: 0 0 20px #0ff, 0 0 40px #0ff, inset 0 0 10px #0ff;
+    background: var(--btn-hover-bg);
+    color: var(--btn-hover-text);
+    box-shadow: 0 0 20px var(--btn-color), 0 0 40px var(--btn-color), inset 0 0 10px var(--btn-color);
 }
 
 .generate-button:active {
