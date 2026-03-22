@@ -3,11 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const numbersContainer = document.getElementById('numbers-container');
     const generateButton = document.getElementById('generate-button');
     
-    const lottoColors = [
-        { color: '#ff4d4d' }, { color: '#4dff4d' },
-        { color: '#4d4dff' }, { color: '#ffff4d' },
-        { color: '#ff4dff' }, { color: '#4dffff' }
-    ];
+    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
 
     function generateLottoNumbers() {
         const numbers = new Set();
@@ -24,9 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const ball = document.createElement('div');
             ball.classList.add('number-ball');
             ball.textContent = number;
-            const color = lottoColors[index % lottoColors.length];
-            ball.style.borderColor = color.color;
-            ball.style.backgroundColor = color.color;
+            ball.style.backgroundColor = colors[index % colors.length];
             ball.style.animationDelay = `${index * 0.1}s`;
             numbersContainer.appendChild(ball);
         });
@@ -45,7 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (themeButton) {
         themeButton.addEventListener('click', () => {
-            if (body.hasAttribute('data-theme')) {
+            const isDark = body.hasAttribute('data-theme');
+            if (isDark) {
                 body.removeAttribute('data-theme');
                 localStorage.setItem('theme', 'light');
             } else {
@@ -55,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Navigation Logic ---
+    // --- Navigation Highlights ---
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('.nav-links a');
 
@@ -69,9 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         navLinks.forEach(link => {
-            link.style.color = '';
+            link.classList.remove('active');
             if (link.getAttribute('href').includes(current)) {
-                link.style.color = 'var(--btn-color)';
+                link.style.color = 'var(--accent-color)';
+            } else {
+                link.style.color = '';
             }
         });
     });
@@ -136,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 prediction.forEach(p => {
                     const row = document.createElement('div');
                     row.classList.add('label-row');
-                    row.innerHTML = `<span class="label-name" style="width:70px; font-size:0.6rem;">${p.className}</span>
+                    row.innerHTML = `<span class="label-name" style="width:80px; font-size:0.7rem;">${p.className}</span>
                                      <div class="bar-container" style="flex-grow:1;"><div class="bar" style="width:${p.probability*100}%"></div></div>`;
                     labelsDiv.appendChild(row);
                 });
@@ -145,24 +142,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Smart Food Picker Logic ---
+    // --- Lifestyle Tools Logic ---
     const foodData = {
-        happy: [
-            { name: "Colorful Poke Bowl", desc: "Fresh fish and vibrant veggies to match your bright mood!" },
-            { name: "Grilled Salmon Pasta", desc: "Elegant and delicious for a celebratory day." }
-        ],
-        stressed: [
-            { name: "Extra Spicy Ramen", desc: "Sweat out the stress with some serious heat." },
-            { name: "Cheesy Deep Dish Pizza", desc: "Sometimes comfort comes in layers of cheese." }
-        ],
-        tired: [
-            { name: "Warm Chicken Soup", desc: "A hug in a bowl to recharge your energy." },
-            { name: "Beef Pho", desc: "Light yet satisfying broth to soothe your soul." }
-        ],
-        excited: [
-            { name: "Taco Party Platter", desc: "Fun, messy, and perfect for an adventurous spirit." },
-            { name: "Fusion Sushi Rolls", desc: "Unexpected flavors for an exciting day." }
-        ]
+        happy: [ { name: "Colorful Poke Bowl", desc: "Fresh fish and vibrant veggies for a bright day." }, { name: "Salmon Pasta", desc: "Healthy fats to keep the energy high." } ],
+        stressed: [ { name: "Spicy Volcano Ramen", desc: "Sweat out the stress with intense flavor." }, { name: "Dark Chocolate Fondue", desc: "Magnesium and joy in every bite." } ],
+        tired: [ { name: "Chicken Ginseng Soup", desc: "Traditional restoration for a weary body." }, { name: "Beef Bone Broth", desc: "Slow-cooked comfort for deep recovery." } ],
+        excited: [ { name: "Taco Feast", desc: "Spices and variety for an adventurous spirit." }, { name: "Fusion Dim Sum", desc: "Unexpected delights for an exciting day." } ]
     };
 
     const pickFoodBtn = document.getElementById('pick-food-button');
@@ -178,71 +163,36 @@ document.addEventListener('DOMContentLoaded', () => {
             foodName.innerText = pick.name;
             foodDesc.innerText = pick.desc;
             foodResult.style.display = 'block';
-            foodResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         });
     }
 
-    // --- Gourmet Recipe Finder Logic ---
-    const recipes = [
-        { name: "Creamy Mushroom Risotto", time: "40m", diff: "Medium", ingredients: ["Arborio Rice", "Mushrooms", "Parmesan", "Broth"] },
-        { name: "Honey Garlic Glazed Chicken", time: "25m", diff: "Easy", ingredients: ["Chicken Thighs", "Honey", "Garlic", "Soy Sauce"] },
-        { name: "Classic Italian Bruschetta", time: "15m", diff: "Easy", ingredients: ["Baguette", "Tomatoes", "Basil", "Olive Oil"] }
-    ];
-
-    const recipeList = document.getElementById('recipe-list');
-    if (recipeList) {
-        recipes.forEach(r => {
-            const card = document.createElement('div');
-            card.classList.add('recipe-card');
-            card.innerHTML = `
-                <h4>${r.name}</h4>
-                <div class="meta">⏱ ${r.time} | ⚖ ${r.diff}</div>
-                <ul>${r.ingredients.map(ing => `<li>${ing}</li>`).join('')}</ul>
-            `;
-            recipeList.appendChild(card);
-        });
-    }
-
-    // --- AI Nutrition Guide Logic ---
     const supplementData = {
-        energy: [
-            { name: "Vitamin B-Complex", info: "Converts food into fuel and supports brain function." },
-            { name: "CoQ10", info: "Essential for cellular energy production." }
-        ],
-        sleep: [
-            { name: "Magnesium Glycinate", info: "Promotes relaxation and improves sleep quality." },
-            { name: "L-Theanine", info: "Reduces stress and supports a calm mind." }
-        ],
-        skin: [
-            { name: "Collagen Peptides", info: "Supports skin elasticity and hydration." },
-            { name: "Vitamin C", info: "Vital for collagen synthesis and bright skin." }
-        ],
-        immunity: [
-            { name: "Zinc", info: "Crucial for immune cell development and function." },
-            { name: "Vitamin D3", info: "Helps regulate the immune system effectively." }
-        ]
+        energy: [ { name: "Vitamin B-Complex", info: "Supports metabolism and energy levels." }, { name: "CoQ10", info: "Essential for heart and cellular energy." } ],
+        sleep: [ { name: "Magnesium Glycinate", info: "Calms the nervous system for deep rest." }, { name: "L-Theanine", info: "Promotes relaxation without drowsiness." } ],
+        skin: [ { name: "Marine Collagen", info: "Supports elasticity and hydration." }, { name: "Vitamin C", info: "Brightens skin and supports repair." } ],
+        immunity: [ { name: "Zinc Picolinate", info: "Crucial for immune cell function." }, { name: "Elderberry", info: "Packed with antioxidants for protection." } ]
     };
 
-    const goalItems = document.querySelectorAll('.goal-item');
+    const goalBtns = document.querySelectorAll('.goal-btn');
     const supplementResult = document.getElementById('supplement-result');
     const supplementList = document.getElementById('supplement-list');
 
-    if (goalItems) {
-        goalItems.forEach(item => {
-            item.addEventListener('click', () => {
-                goalItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                const goal = item.getAttribute('data-goal');
+    if (goalBtns) {
+        goalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                goalBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const goal = btn.getAttribute('data-goal');
                 const sups = supplementData[goal];
                 supplementList.innerHTML = '';
                 sups.forEach(s => {
-                    const sItem = document.createElement('div');
-                    sItem.classList.add('supplement-item');
-                    sItem.innerHTML = `<h4>${s.name}</h4><p>${s.info}</p>`;
-                    supplementList.appendChild(sItem);
+                    const item = document.createElement('div');
+                    item.classList.add('tool-result');
+                    item.style.marginBottom = '0.5rem';
+                    item.innerHTML = `<h5 style="margin:0;color:var(--accent-color);">${s.name}</h5><p style="margin:0;font-size:0.8rem;">${s.info}</p>`;
+                    supplementList.appendChild(item);
                 });
                 supplementResult.style.display = 'block';
-                supplementResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             });
         });
     }
