@@ -165,6 +165,7 @@ body {
     width: 90%;
     max-width: 500px;
     transition: all 0.3s ease;
+    margin-bottom: 50px;
 }
 
 .contact-section h2 {
@@ -216,4 +217,15 @@ body {
 
 .submit-button:hover {
     opacity: 0.9;
+}
+
+.comment-section {
+    background: var(--machine-bg);
+    border-radius: 30px;
+    padding: 40px;
+    box-shadow: 0 0 15px var(--shadow-color);
+    border: 2px solid var(--machine-border);
+    width: 90%;
+    max-width: 500px;
+    transition: all 0.3s ease;
 }
