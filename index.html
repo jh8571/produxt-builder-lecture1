@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lotto & Animal Face Test</title>
+    <title>Lotto & Animal Face Test - AI Fun Site</title>
+    <meta name="description" content="Try our AI-powered Animal Face Test and generate your lucky lotto numbers! Fun, fast, and free AI entertainment.">
     <meta name="google-adsense-account" content="ca-pub-9103697866666926">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
     
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9103697866666926"
@@ -19,79 +20,147 @@
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 </head>
 <body>
-    <div class="theme-toggle">
-        <button id="theme-button">SWITCH THEME</button>
-    </div>
+    <header class="main-header">
+        <nav class="nav-container">
+            <div class="logo">AI FUN</div>
+            <ul class="nav-links">
+                <li><a href="#lotto">LOTTO</a></li>
+                <li><a href="#animal-test">ANIMAL TEST</a></li>
+                <li><a href="#about">ABOUT</a></li>
+                <li><a href="#policy">POLICY</a></li>
+            </ul>
+            <button id="theme-button">THEME</button>
+        </nav>
+    </header>
 
-    <!-- Lotto Section -->
-    <div class="machine">
-        <div class="machine-header">
-            <h1>LUCKY NUMBER</h1>
-        </div>
-        <div class="display-screen">
-            <div id="numbers-container" class="numbers-container">
-                <!-- Numbers will be injected here by JavaScript -->
+    <main class="content-wrapper">
+        <section id="hero" class="hero-section">
+            <h1>Discover Your Luck & Animal Look</h1>
+            <p>Experience the latest AI technology combined with classic fun. Generate your lucky numbers and find out which animal you resemble most!</p>
+        </section>
+
+        <!-- Lotto Section -->
+        <section id="lotto" class="machine-section">
+            <div class="machine">
+                <div class="machine-header">
+                    <h2>LUCKY NUMBER</h2>
+                    <p>Get your AI-optimized lucky numbers for the next draw.</p>
+                </div>
+                <div class="display-screen">
+                    <div id="numbers-container" class="numbers-container">
+                        <!-- Numbers will be injected here by JavaScript -->
+                    </div>
+                </div>
+                <div class="machine-footer">
+                    <button id="generate-button" class="generate-button">
+                        GENERATE LOTTO
+                    </button>
+                </div>
             </div>
-        </div>
-        <div class="machine-footer">
-            <button id="generate-button" class="generate-button">
-                GENERATE LOTTO
+        </section>
+
+        <!-- Animal Face Test Section -->
+        <section id="animal-test" class="animal-test-section">
+            <div class="machine-header">
+                <h2>ANIMAL FACE TEST</h2>
+                <p>Upload your photo and let our AI determine your animal look-alike.</p>
+            </div>
+            <div class="upload-area" id="upload-area">
+                <input type="file" id="image-input" accept="image/*" hidden>
+                <div id="image-preview" class="image-preview">
+                    <span id="upload-label">CLICK OR DRAG IMAGE</span>
+                </div>
+            </div>
+            <div id="loading-spinner" class="spinner" style="display: none;"></div>
+            <div id="result-container" class="result-container" style="display: none;">
+                <h3 id="result-message"></h3>
+                <div id="label-container" class="label-container"></div>
+            </div>
+            <button id="predict-button" class="generate-button" style="margin-top: 20px; display: none;">
+                ANALYZE FACE
             </button>
-        </div>
-    </div>
+        </section>
 
-    <!-- Animal Face Test Section -->
-    <section class="animal-test-section">
-        <div class="machine-header">
-            <h1>ANIMAL FACE TEST</h1>
-        </div>
-        <div class="upload-area" id="upload-area">
-            <input type="file" id="image-input" accept="image/*" hidden>
-            <div id="image-preview" class="image-preview">
-                <span id="upload-label">CLICK OR DRAG IMAGE</span>
+        <!-- About Section -->
+        <section id="about" class="info-section">
+            <h2>About This Site</h2>
+            <p>Our site combines advanced artificial intelligence with simple entertainment. We use Google's Teachable Machine technology to provide high-quality image classification for our Animal Face Test. Our goal is to provide a fun and safe environment for users to explore AI capabilities.</p>
+            
+            <h3>How to Use</h3>
+            <div class="guide-grid">
+                <div class="guide-item">
+                    <h4>Lotto Generator</h4>
+                    <p>Simply click the 'GENERATE LOTTO' button to get a set of 6 unique numbers between 1 and 45. The numbers are sorted for your convenience.</p>
+                </div>
+                <div class="guide-item">
+                    <h4>Animal Face Test</h4>
+                    <p>Upload a clear photo of your face. Our AI model will analyze your features and compare them to our animal database to find your match.</p>
+                </div>
             </div>
-        </div>
-        <div id="loading-spinner" class="spinner" style="display: none;"></div>
-        <div id="result-container" class="result-container" style="display: none;">
-            <h2 id="result-message"></h2>
-            <div id="label-container" class="label-container"></div>
-        </div>
-        <button id="predict-button" class="generate-button" style="margin-top: 20px; display: none;">
-            ANALYZE FACE
-        </button>
-    </section>
+        </section>
 
-    <section class="contact-section">
-        <h2>PARTNERSHIP</h2>
-        <form action="https://formspree.io/f/xaqpzkaj" method="POST">
-            <div class="form-group">
-                <label for="name">NAME</label>
-                <input type="text" id="name" name="name" placeholder="Your Name" required>
+        <!-- Policy Section -->
+        <section id="policy" class="info-section">
+            <h2>Legal & Privacy</h2>
+            <div class="policy-container">
+                <div class="policy-item">
+                    <h3>Privacy Policy</h3>
+                    <p>Your privacy is important to us. When you use the Animal Face Test, your images are processed locally in your browser using TensorFlow.js. We do not upload or store your photos on our servers. Any data used during the session is temporary and deleted when you close the browser tab.</p>
+                </div>
+                <div class="policy-item">
+                    <h3>Terms of Service</h3>
+                    <p>By using this site, you agree to use it for entertainment purposes only. The results of the Lotto Generator and Animal Face Test are for fun and should not be taken as professional advice or guaranteed outcomes.</p>
+                </div>
+                <div class="policy-item">
+                    <h3>AdSense Disclosure</h3>
+                    <p>This site uses Google AdSense to show advertisements. Google may use cookies to serve ads based on your prior visits to this or other websites.</p>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="email">EMAIL</label>
-                <input type="email" id="email" name="_replyto" placeholder="your@email.com" required>
-            </div>
-            <div class="form-group">
-                <label for="message">MESSAGE</label>
-                <textarea id="message" name="message" placeholder="How can we help you?" required></textarea>
-            </div>
-            <button type="submit" class="submit-button">SEND MESSAGE</button>
-        </form>
-    </section>
+        </section>
 
-    <section class="comment-section">
-        <div id="disqus_thread"></div>
-        <script>
-            (function() {
-            var d = document, s = d.createElement('script');
-            s.src = 'https://productbuilder-rggcti80hp.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    </section>
+        <section id="contact" class="contact-section">
+            <h2>PARTNERSHIP</h2>
+            <form action="https://formspree.io/f/xaqpzkaj" method="POST">
+                <div class="form-group">
+                    <label for="name">NAME</label>
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">EMAIL</label>
+                    <input type="email" id="email" name="_replyto" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">MESSAGE</label>
+                    <textarea id="message" name="message" placeholder="How can we help you?" required></textarea>
+                </div>
+                <button type="submit" class="submit-button">SEND MESSAGE</button>
+            </form>
+        </section>
+
+        <section class="comment-section">
+            <div id="disqus_thread"></div>
+            <script>
+                (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://productbuilder-rggcti80hp.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2026 AI FUN SITE. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#hero">Home</a>
+                <a href="#about">About</a>
+                <a href="#policy">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
 
     <script src="main.js"></script>
 </body>

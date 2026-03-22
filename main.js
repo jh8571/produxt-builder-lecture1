@@ -25,40 +25,65 @@ document.addEventListener('DOMContentLoaded', () => {
             ball.textContent = number;
             const color = colors[index % colors.length];
             ball.style.borderColor = color.color;
-            ball.style.boxShadow = `0 0 10px ${color.shadow}, inset 0 0 5px ${color.shadow}`;
-            ball.style.textShadow = `0 0 5px ${color.shadow}`;
-            ball.style.animationDelay = `${index * 0.2}s`;
+            ball.style.backgroundColor = color.color; // Solid color for balls in the new UI
+            ball.style.boxShadow = `0 4px 10px rgba(0,0,0,0.2)`;
+            ball.style.animationDelay = `${index * 0.1}s`;
             numbersContainer.appendChild(ball);
         });
     }
 
-    generateButton.addEventListener('click', () => displayNumbers(generateLottoNumbers()));
-    displayNumbers(generateLottoNumbers());
+    if (generateButton) {
+        generateButton.addEventListener('click', () => displayNumbers(generateLottoNumbers()));
+        displayNumbers(generateLottoNumbers());
+    }
 
     // --- Theme Logic ---
     const themeButton = document.getElementById('theme-button');
     const body = document.body;
-    const currentTheme = localStorage.getItem('theme') || 'dark';
+    const currentTheme = localStorage.getItem('theme') || 'light';
     if (currentTheme === 'dark') body.setAttribute('data-theme', 'dark');
 
-    themeButton.addEventListener('click', () => {
-        if (body.hasAttribute('data-theme')) {
-            body.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'light');
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-        }
+    if (themeButton) {
+        themeButton.addEventListener('click', () => {
+            if (body.hasAttribute('data-theme')) {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    }
+
+    // --- Navigation Logic ---
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= (sectionTop - 150)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.style.color = ''; // Reset
+            if (link.getAttribute('href').includes(current)) {
+                link.style.color = 'var(--btn-color)';
+            }
+        });
     });
 
     // --- Animal Face Test Logic ---
     const URL = "https://teachablemachine.withgoogle.com/models/b9dt_EjLG/";
-    let model, labelContainer, maxPredictions;
+    let model, maxPredictions;
 
     const uploadArea = document.getElementById('upload-area');
     const imageInput = document.getElementById('image-input');
     const imagePreview = document.getElementById('image-preview');
-    const uploadLabel = document.getElementById('upload-label');
     const predictButton = document.getElementById('predict-button');
     const resultContainer = document.getElementById('result-container');
     const resultMessage = document.getElementById('result-message');
@@ -70,77 +95,92 @@ document.addEventListener('DOMContentLoaded', () => {
     async function initModel() {
         if (model) return;
         spinner.style.display = 'block';
-        const modelURL = URL + "model.json";
-        const metadataURL = URL + "metadata.json";
-        model = await tmImage.load(modelURL, metadataURL);
-        maxPredictions = model.getTotalClasses();
+        try {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+        } catch (err) {
+            console.error("Model loading failed:", err);
+            alert("Failed to load AI model. Please try again later.");
+        }
         spinner.style.display = 'none';
     }
 
-    uploadArea.addEventListener('click', () => imageInput.click());
+    if (uploadArea) {
+        uploadArea.addEventListener('click', () => imageInput.click());
+    }
 
-    imageInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    imagePreview.innerHTML = '';
-                    imagePreview.appendChild(img);
-                    uploadedImage = img;
-                    predictButton.style.display = 'block';
-                    resultContainer.style.display = 'none';
+    if (imageInput) {
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        imagePreview.innerHTML = '';
+                        imagePreview.appendChild(img);
+                        uploadedImage = img;
+                        predictButton.style.display = 'block';
+                        resultContainer.style.display = 'none';
+                        predictButton.innerText = "ANALYZE FACE";
+                    };
                 };
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    predictButton.addEventListener('click', async () => {
-        if (!uploadedImage) return;
-        predictButton.disabled = true;
-        spinner.style.display = 'block';
-        
-        await initModel();
-        const prediction = await model.predict(uploadedImage);
-        
-        spinner.style.display = 'none';
-        resultContainer.style.display = 'block';
-        labelsDiv.innerHTML = '';
-
-        // Find best match
-        prediction.sort((a, b) => b.probability - a.probability);
-        const bestMatch = prediction[0];
-        resultMessage.innerText = `You look like a ${bestMatch.className}!`;
-
-        prediction.forEach(p => {
-            const row = document.createElement('div');
-            row.classList.add('label-row');
-            
-            const name = document.createElement('span');
-            name.classList.add('label-name');
-            name.innerText = p.className;
-            
-            const barContainer = document.createElement('div');
-            barContainer.classList.add('bar-container');
-            
-            const bar = document.createElement('div');
-            bar.classList.add('bar');
-            
-            row.appendChild(name);
-            row.appendChild(barContainer);
-            barContainer.appendChild(bar);
-            labelsDiv.appendChild(row);
-            
-            // Trigger animation
-            setTimeout(() => {
-                bar.style.width = (p.probability * 100) + '%';
-            }, 100);
+                reader.readAsDataURL(file);
+            }
         });
-        
-        predictButton.disabled = false;
-        predictButton.innerText = "RE-ANALYZE";
-    });
+    }
+
+    if (predictButton) {
+        predictButton.addEventListener('click', async () => {
+            if (!uploadedImage) return;
+            predictButton.disabled = true;
+            spinner.style.display = 'block';
+            
+            await initModel();
+            if (model) {
+                const prediction = await model.predict(uploadedImage);
+                
+                spinner.style.display = 'none';
+                resultContainer.style.display = 'block';
+                labelsDiv.innerHTML = '';
+
+                prediction.sort((a, b) => b.probability - a.probability);
+                const bestMatch = prediction[0];
+                resultMessage.innerText = `You look like a ${bestMatch.className}!`;
+
+                prediction.forEach(p => {
+                    const row = document.createElement('div');
+                    row.classList.add('label-row');
+                    
+                    const name = document.createElement('span');
+                    name.classList.add('label-name');
+                    name.style.width = '80px';
+                    name.style.fontSize = '0.7rem';
+                    name.innerText = p.className;
+                    
+                    const barContainer = document.createElement('div');
+                    barContainer.classList.add('bar-container');
+                    barContainer.style.flexGrow = '1';
+                    
+                    const bar = document.createElement('div');
+                    bar.classList.add('bar');
+                    
+                    row.appendChild(name);
+                    row.appendChild(barContainer);
+                    barContainer.appendChild(bar);
+                    labelsDiv.appendChild(row);
+                    
+                    setTimeout(() => {
+                        bar.style.width = (p.probability * 100) + '%';
+                    }, 100);
+                });
+            }
+            
+            predictButton.disabled = false;
+            predictButton.innerText = "RE-ANALYZE";
+        });
+    }
 });
