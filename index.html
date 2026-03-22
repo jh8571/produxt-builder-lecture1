@@ -1,14 +1,30 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotto Machine - Sophisticated</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+    <div class="machine">
+        <div class="machine-header">
+            <h1>LUCKY NUMBER</h1>
+        </div>
+        <div class="display-screen">
+            <div id="numbers-container" class="numbers-container">
+                <!-- Numbers will be injected here by JavaScript -->
+            </div>
+        </div>
+        <div class="machine-footer">
+            <button id="generate-button" class="generate-button">
+                GENERATE
+            </button>
+        </div>
+    </div>
+    <script src="main.js"></script>
 </body>
 </html>

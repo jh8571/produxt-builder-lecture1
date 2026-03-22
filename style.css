@@ -1,1 +1,103 @@
-/* Add styles here */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: linear-gradient(315deg, #1a1a1a 0%, #3d3d3d 74%);
+    overflow: hidden;
+}
+
+.machine {
+    background: #2c2c2c;
+    border-radius: 30px;
+    padding: 40px;
+    box-shadow: 
+        0 0 15px rgba(0, 255, 255, 0.1),
+        0 0 30px rgba(0, 255, 255, 0.1),
+        inset 0 0 10px rgba(0, 0, 0, 0.5);
+    border: 2px solid #3a3a3a;
+    width: 90%;
+    max-width: 500px;
+}
+
+.machine-header h1 {
+    color: #fff;
+    text-align: center;
+    font-size: 2rem;
+    letter-spacing: 5px;
+    margin: 0 0 30px 0;
+    text-shadow:
+        0 0 5px #0ff,
+        0 0 10px #0ff,
+        0 0 20px #0ff;
+}
+
+.display-screen {
+    background: #111;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
+    border: 1px solid #000;
+}
+
+.numbers-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.number-ball {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    border: 2px solid;
+    opacity: 0;
+    transform: scale(0.5);
+    animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+@keyframes popIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.generate-button {
+    font-family: 'Orbitron', sans-serif;
+    background: transparent;
+    color: #0ff;
+    border: 2px solid #0ff;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
+    box-shadow: 0 0 10px #0ff, inset 0 0 10px #0ff;
+    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.generate-button:hover {
+    background: #0ff;
+    color: #111;
+    box-shadow: 0 0 20px #0ff, 0 0 40px #0ff, inset 0 0 10px #0ff;
+}
+
+.generate-button:active {
+    transform: scale(0.98);
+}
